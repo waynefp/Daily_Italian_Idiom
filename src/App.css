@@ -1,0 +1,36 @@
+/* Responsive layout overrides */
+@media (max-width: 900px) {
+  .hero-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .content-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .archive-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+  .action-bar {
+    flex-direction: column !important;
+    gap: 12px !important;
+    border-radius: 20px !important;
+  }
+  .action-bar-buttons {
+    width: 100%;
+    justify-content: center !important;
+  }
+  .hero-title {
+    font-size: 48px !important;
+  }
+}
+
+@media (max-width: 600px) {
+  .archive-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  .meaning-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .hero-title {
+    font-size: 36px !important;
+  }
+}
