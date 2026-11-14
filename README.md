@@ -1,16 +1,32 @@
-# React + Vite
+# Modi di Dire
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+An Italian idiom a day, plus quick flashcards for the 200 most-used Italian words, designed like a page from a Renaissance notebook.
 
-Currently, two official plugins are available:
+- **Oggi** (`#/`): today's idiom, with its literal translation, meaning, an example, audio, and a downloadable 1080×1350 PNG. Below it are a shortcut into today's flashcard review and the last few days' idioms.
+- **Carte** (`#/carte`): spaced-repetition flashcards, ported from Italiano Flashcards. It has decks, three directions, Again / Hard / Got it grading, a streak, Italian audio, and keyboard shortcuts (Space to flip, 1 2 3 to grade). Progress stays in `localStorage` under the original `itfc.v1` key.
+- **Archivio** (`#/archivio`): every idiom so far, the full set, and saved favourites, with search and theme filters. Each idiom has its own page at `#/detto/<id>`.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Idioms
 
-## React Compiler
+The idioms live in `src/data/idioms/`. The 59 entries in `classic.js` include extended notes: usage situations, register and origin. The rest are compact rows of `[idiom, literal, meaning, example, translation]`.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+The daily order is fixed: day 1 is 1 January 2026, and the set repeats only after every idiom has been shown once. Themes are interleaved so consecutive days rarely share a theme.
 
-## Expanding the ESLint configuration
+```bash
+npm run check:idioms   # required fields, duplicates, rotation over several years
+```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Development
+
+```bash
+npm install
+npm run dev
+npm run build    # static output in dist/
+npm run lint
+```
+
+Fonts (Cormorant Garamond, EB Garamond, IM Fell English) are self-hosted via `@fontsource`, so the PNG export can embed them.
+
+## Deploying
+
+This is a plain Vite static build. On Vercel the defaults work: framework "Vite", build command `npm run build`, output directory `dist`. Routing is hash-based, so no rewrites are needed.

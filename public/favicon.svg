@@ -1,4 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <rect width="32" height="32" rx="6" fill="#C9553C"/>
-  <text x="16" y="24" font-family="Georgia, serif" font-size="22" font-weight="700" font-style="italic" fill="#fff" text-anchor="middle">I</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="12" fill="#efe3c8"/>
+  <rect x="3.5" y="3.5" width="57" height="57" rx="9" fill="none" stroke="#6e5236" stroke-width="1.2" opacity=".6"/>
+  <g fill="none" stroke="#9e3d22" stroke-linecap="round">
+    <circle cx="32" cy="32" r="22" stroke-width="2.4"/>
+    <path d="M16.5 16.5H47.5V47.5H16.5Z" stroke-width="2"/>
+    <path d="M32 6V58M6 32H58" stroke-width="1.1" opacity=".7"/>
+  </g>
+  <path d="M32 12L35.5 32L32 52L28.5 32Z" fill="#9e3d22" fill-opacity=".25" stroke="#9e3d22" stroke-width="1.4"/>
+  <circle cx="32" cy="32" r="3.4" fill="#9e3d22"/>
 </svg>
