@@ -10,7 +10,7 @@ import {
   loadState,
   saveState,
 } from '../lib/flashcards';
-import { speak, canSpeak } from '../lib/speech';
+import { speak, canSpeak, getAutoSpeak, setAutoSpeak } from '../lib/speech';
 import { toRoman } from '../lib/format';
 import { Corner, Fleuron, Mirror, Seal } from '../components/Ornaments';
 import { IconFlame, IconSound, IconSpeaker } from '../components/Icons';
@@ -20,7 +20,6 @@ const GRADES = [
   { g: 1, label: 'Hard', sub: 'got it slowly', cls: 'grade-hard' },
   { g: 2, label: 'Got it', sub: 'easy', cls: 'grade-good' },
 ];
-const SOUND_KEY = 'mdd.cardSound';
 
 const pickDir = (dir) => (dir === 'mix' ? (Math.random() < 0.5 ? 'it' : 'en') : dir);
 
@@ -37,7 +36,7 @@ export default function Flashcards() {
     return { queue, idx: 0, results: [], dir: pickDir(st.dir) };
   });
   const [flipped, setFlipped] = useState(false);
-  const [sound, setSound] = useState(() => localStorage.getItem(SOUND_KEY) !== 'off');
+  const [sound, setSound] = useState(getAutoSpeak);
 
   const { queue, idx, results, dir } = session;
   const card = queue[idx];
@@ -121,8 +120,7 @@ export default function Flashcards() {
   const toggleSound = () => {
     const on = !sound;
     setSound(on);
-    localStorage.setItem(SOUND_KEY, on ? 'on' : 'off');
-    if (!on) window.speechSynthesis?.cancel();
+    setAutoSpeak(on);
   };
 
   const progress = queue.length ? (done ? 100 : (idx / queue.length) * 100) : 0;

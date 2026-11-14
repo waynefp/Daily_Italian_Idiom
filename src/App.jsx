@@ -2,9 +2,10 @@ import { useEffect, useSyncExternalStore } from 'react';
 import Today from './views/Today';
 import Flashcards from './views/Flashcards';
 import Archive from './views/Archive';
+import Sentences from './views/Sentences';
 import IdiomDetail from './views/IdiomDetail';
 import { Seal } from './components/Ornaments';
-import { IconBook, IconCards, IconSun } from './components/Icons';
+import { IconBook, IconCards, IconQuill, IconSun } from './components/Icons';
 
 const subscribe = (cb) => {
   window.addEventListener('hashchange', cb);
@@ -16,6 +17,7 @@ function parse(hash) {
   const path = hash.replace(/^#\/?/, '');
   const [head, ...rest] = path.split('/');
   if (head === 'carte') return { name: 'cards' };
+  if (head === 'frasi') return { name: 'sentences', mode: rest[0] === 'pratica' ? 'practice' : 'frames', scope: rest[1] };
   if (head === 'archivio') return { name: 'archive' };
   if (head === 'detto' && rest[0]) return { name: 'idiom', id: decodeURIComponent(rest[0]) };
   return { name: 'today' };
@@ -24,12 +26,14 @@ function parse(hash) {
 const NAV = [
   { name: 'today', href: '#/', it: 'Oggi', en: 'Today', Icon: IconSun },
   { name: 'cards', href: '#/carte', it: 'Carte', en: 'Flashcards', Icon: IconCards },
+  { name: 'sentences', href: '#/frasi', it: 'Frasi', en: 'Sentences', Icon: IconQuill },
   { name: 'archive', href: '#/archivio', it: 'Archivio', en: 'Archive', Icon: IconBook },
 ];
 
 const TITLES = {
   today: 'Modi di Dire · Il detto del giorno',
   cards: 'Carte · Modi di Dire',
+  sentences: 'Frasi · Modi di Dire',
   archive: 'Archivio · Modi di Dire',
   idiom: 'Modi di Dire',
 };
@@ -45,6 +49,7 @@ export default function App() {
 
   let view;
   if (route.name === 'cards') view = <Flashcards />;
+  else if (route.name === 'sentences') view = <Sentences mode={route.mode} scope={route.scope} />;
   else if (route.name === 'archive') view = <Archive />;
   else if (route.name === 'idiom') view = <IdiomDetail id={route.id} />;
   else view = <Today />;

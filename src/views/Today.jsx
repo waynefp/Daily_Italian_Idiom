@@ -3,7 +3,9 @@ import IdiomPage from '../components/IdiomPage';
 import { getIdiomForDate, getPastIdioms } from '../data/idioms';
 import { loadState, deckStats, liveStreak, DECKS } from '../lib/flashcards';
 import { formatShortIt } from '../lib/format';
-import { IconArrow, IconCards, IconFlame } from '../components/Icons';
+import { loadPrefs } from '../lib/sentences';
+import { FRAMES } from '../data/sentences/frames';
+import { IconArrow, IconCards, IconFlame, IconQuill } from '../components/Icons';
 
 function ReviewPrompt() {
   const s = useMemo(() => loadState(), []);
@@ -30,6 +32,27 @@ function ReviewPrompt() {
               <IconFlame /> {streak}
             </span>
           )}
+        </span>
+      </span>
+      <span className="review-go">
+        <IconArrow />
+      </span>
+    </a>
+  );
+}
+
+function SentencePrompt() {
+  const { size } = useMemo(() => loadPrefs(), []);
+  return (
+    <a className="review-card" href="#/frasi/pratica">
+      <span className="review-icon">
+        <IconQuill />
+      </span>
+      <span className="review-text">
+        <span className="caps">Pratica · Frasi</span>
+        <span className="review-line">Say {size} sentences in Italian</span>
+        <span className="review-meta">
+          Shuffled from {FRAMES.length} frames · about {Math.max(2, Math.round(size * 0.3))} min
         </span>
       </span>
       <span className="review-go">
@@ -70,6 +93,7 @@ export default function Today() {
   return (
     <IdiomPage idiom={idiom} date={today} isToday>
       <ReviewPrompt />
+      <SentencePrompt />
       <Recent today={today} />
     </IdiomPage>
   );

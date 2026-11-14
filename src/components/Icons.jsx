@@ -79,3 +79,24 @@ export const IconSound = ({ off }) => (
     {off ? <path d="M16 9.5l5 5M21 9.5l-5 5" /> : <path d="M15.5 9c1.2 1.6 1.2 4.4 0 6M18.5 6.5c2.4 3 2.4 8 0 11" />}
   </svg>
 );
+
+export const IconQuill = () => (
+  <svg {...base}>
+    <path d="M20 4c-6.5.6-11 4.6-12.6 11.4L6 20" />
+    <path d="M20 4c-.3 5.8-3.4 9.8-9.6 11.2" />
+    <path d="M9.6 11.6c2.2-.4 4.3-.2 6.2.6" />
+  </svg>
+);
+
+export const IconShuffle = () => (
+  <svg {...base} width={16} height={16}>
+    <path d="M3 7h3.5c4.5 0 6.5 10 11 10H21M3 17h3.5c1.6 0 2.8-1.2 3.8-2.8M13.7 9.8C14.7 8.2 15.9 7 17.5 7H21" />
+    <path d="M18.5 4.5L21 7l-2.5 2.5M18.5 14.5L21 17l-2.5 2.5" />
+  </svg>
+);
+
+export const IconChevron = ({ dir = 'right' }) => (
+  <svg {...base} width={18} height={18}>
+    <path d={dir === 'right' ? 'M9.5 5.5l6.5 6.5-6.5 6.5' : 'M14.5 5.5L8 12l6.5 6.5'} />
+  </svg>
+);
