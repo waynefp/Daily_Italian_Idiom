@@ -281,7 +281,7 @@ const FRAME_LIST = [
       ["bottiglia d'acqua", 'f', 'Another bottle of water'],
       ['tovagliolo', 'm', 'Another napkin'],
       ['porzione di patatine', 'f', 'Another portion of fries'],
-      ['minuto', 'm', 'One more minute'],
+      ['fetta di torta', 'f', 'Another slice of cake'],
     ].map(([it, g, en]) => {
       const phrase = indef(noun(`${agree('altro', { g, pl: false })} ${it}`, g));
       return w(phrase.charAt(0).toUpperCase() + phrase.slice(1), en);
@@ -375,15 +375,16 @@ const FRAME_LIST = [
     id: 'prendo',
     group: 'negozio',
     pattern: { it: 'Prendo ___.', en: 'I’ll take ___.' },
+    tip: 'With a number or amount, add ne (“of them”): Ne prendo due, Ne prendo un chilo.',
     items: [
       w('questo', 'this one'),
       w('quello', 'that one'),
       w('quello rosso', 'the red one'),
+      w('quella blu', 'the blue one'),
+      w('quelli', 'those ones'),
       w('tutti e due', 'both'),
-      w('due', 'two'),
       w(def(noun('taglia media', 'f')), 'the medium size'),
-      w('un chilo', 'a kilo'),
-      w('mezzo chilo', 'half a kilo'),
+      w('quello in vetrina', 'the one in the window'),
     ],
     make: (x) => S(['Prendo ', x.it, '.'], ["I'll take ", x.en, '.']),
   },
@@ -603,11 +604,11 @@ const FRAME_LIST = [
     id: 'anche',
     group: 'chiave',
     pattern: { it: 'Anche ___.', en: '___ too.' },
-    tip: 'Anche a me answers mi piace: “I like it too.”',
+    tip: 'Anche a me answers mi piace (“I like it too”). Anche Lei is the polite reply to Buona giornata!',
     items: [
       w('io', 'Me'),
-      w('tu', 'You'),
-      w('lei', 'Her'),
+      w('tu', 'You', { post: ' too (informal).' }),
+      w('Lei', 'You', { post: ' too (formal).' }),
       w('noi', 'Us'),
       w('a me', 'Me', { post: ' too (I like it too).' }),
       w('oggi', 'Today'),
