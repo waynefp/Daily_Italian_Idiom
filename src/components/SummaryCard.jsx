@@ -1,145 +1,81 @@
-import { P } from '../data/palette';
+import { THEMES, IDIOMS } from '../data/idioms';
+import { toRoman, formatLongIt } from '../lib/format';
+import Sketch from './Sketch';
+import { Corner, Fleuron, Mirror, Rule, Seal } from './Ornaments';
 
-export default function SummaryCard({ idiom: T }) {
+const pick = (len, steps) => steps.find(([max]) => len <= max)?.[1] ?? steps[steps.length - 1][1];
+// Scaled by --fit, which the exporter lowers if the copy would overflow.
+const px = (n) => `calc(var(--fit, 1) * ${n}px)`;
+
+/** The 1080×1350 page that is rendered to PNG. */
+export default function SummaryCard({ ref, idiom, date }) {
+  const ex = idiom.examples[0];
+  const theme = THEMES[idiom.theme];
+  const titleSize = pick(idiom.idiom.length, [[12, 140], [18, 124], [24, 112], [32, 98], [42, 86], [56, 74], [999, 64]]);
+  const meaningSize = pick(idiom.meaning.length, [[70, 44], [120, 41], [170, 38], [999, 35]]);
+  const exSize = pick(ex.it.length + ex.en.length, [[110, 40], [170, 37], [240, 34], [999, 31]]);
+  const literalSize = pick(idiom.literal.length, [[40, 42], [70, 38], [999, 34]]);
+
   return (
-    <div
-      id="summary-card"
-      style={{
-        width: 1080,
-        height: 1350,
-        background: P.bg,
-        color: P.ink,
-        fontFamily: P.sans,
-        padding: 64,
-        boxSizing: 'border-box',
-        display: 'flex',
-        flexDirection: 'column',
-        position: 'relative',
-      }}
-    >
-      {/* Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 32 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-          <div
-            style={{
-              width: 44, height: 44, borderRadius: 10, background: P.accent,
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              color: '#fff', fontFamily: P.serif, fontWeight: 700, fontSize: 24, fontStyle: 'italic',
-            }}
-          >
-            I
-          </div>
+    <div ref={ref} className="sc" style={{ width: 1080, height: 1350 }}>
+      <div className="sc-frame" />
+      <div className="sc-frame-inner" />
+      <Corner className="sc-corner c-tl" />
+      <Corner className="sc-corner c-tr" />
+      <Corner className="sc-corner c-bl" />
+      <Corner className="sc-corner c-br" />
+      <Sketch theme={idiom.theme} className="sc-sketch" />
+
+      <header className="sc-head">
+        <div className="sc-brand">
+          <Seal size={72} />
           <div>
-            <div style={{ fontFamily: P.serif, fontSize: 22, fontWeight: 600, lineHeight: 1 }}>Modi di Dire</div>
-            <div style={{ fontFamily: P.mono, fontSize: 12, color: P.mute, letterSpacing: 1.2, textTransform: 'uppercase', marginTop: 4 }}>
-              One Italian idiom, every day.
-            </div>
+            <div className="sc-wordmark">Modi di Dire</div>
+            <div className="sc-caps">Un detto italiano al giorno</div>
           </div>
         </div>
-        <div style={{ textAlign: 'right' }}>
-          <div style={{ fontFamily: P.mono, fontSize: 12, color: P.mute, letterSpacing: 1.2, textTransform: 'uppercase' }}>
-            {T.dateShort}
-          </div>
-          <div style={{ fontFamily: P.mono, fontSize: 11, color: P.accent, letterSpacing: 1.2, textTransform: 'uppercase', marginTop: 4, fontWeight: 600 }}>
-            Day {T.dayNumber} / 365
-          </div>
+        <div className="sc-meta">
+          <div className="sc-caps">{date ? formatLongIt(date) : `${theme.it} · ${theme.en}`}</div>
+          <div className="sc-caps sc-folio">Folio {toRoman(idiom.number)}</div>
         </div>
-      </div>
+      </header>
 
-      {/* Hero */}
-      <div style={{ background: P.card, border: `1px solid ${P.line}`, borderRadius: 24, padding: 40, marginBottom: 20 }}>
-        <div style={{ fontFamily: P.mono, fontSize: 12, letterSpacing: 1.6, textTransform: 'uppercase', color: P.mute, marginBottom: 18 }}>
-          Today's Italian idiom
-        </div>
-        <div
-          style={{
-            fontFamily: P.serif, fontWeight: 500, fontSize: 140, lineHeight: 0.95,
-            letterSpacing: -4, fontStyle: 'italic', margin: 0,
-          }}
-        >
-          {(() => {
-            const words = T.idiom.replace(/[!?.]$/, '').split(' ');
-            const punct = T.idiom.match(/[!?.]$/)?.[0] || '';
-            const last = words.pop();
-            return <>{words.join(' ')}{words.length ? ' ' : ''}<span style={{ color: P.accent }}>{last}</span>{punct}</>;
-          })()}
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 18, marginTop: 18 }}>
-          <span style={{ fontFamily: P.mono, fontSize: 16, color: P.mute }}>{T.pronunciation}</span>
-          <span style={{ width: 4, height: 4, borderRadius: 4, background: P.mute, opacity: 0.5 }} />
-          <span style={{ fontFamily: P.mono, fontSize: 14, color: P.mute, letterSpacing: 0.8 }}>{T.syllables}</span>
-        </div>
-      </div>
+      <Rule className="sc-rule" />
 
-      {/* Meaning row */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginBottom: 20 }}>
-        <div style={{ padding: 26, background: P.card, border: `1px solid ${P.line}`, borderRadius: 18 }}>
-          <div style={{ fontFamily: P.mono, fontSize: 11, letterSpacing: 1.6, textTransform: 'uppercase', color: P.mute, marginBottom: 10 }}>
-            Literal
-          </div>
-          <div style={{ fontFamily: P.serif, fontSize: 26, fontStyle: 'italic', lineHeight: 1.25, color: P.ink }}>
-            {T.literal}
-          </div>
-        </div>
-        <div style={{ padding: 26, background: P.accent, color: '#FBF4E2', borderRadius: 18 }}>
-          <div style={{ fontFamily: P.mono, fontSize: 11, letterSpacing: 1.6, textTransform: 'uppercase', opacity: 0.8, marginBottom: 10 }}>
-            Actually means
-          </div>
-          <div style={{ fontFamily: P.serif, fontSize: 26, lineHeight: 1.25 }}>
-            {T.actual.split('.')[0]}.
-          </div>
-        </div>
-      </div>
+      <main className="sc-body">
+        <div className="sc-inner">
+        <div className="sc-caps sc-eyebrow">{date ? 'Il detto del giorno' : 'Dal codice'}</div>
+        <h1 className="sc-title" style={{ fontSize: px(titleSize) }}>
+          <span className="initial">{idiom.idiom.charAt(0)}</span>
+          {idiom.idiom.slice(1)}
+        </h1>
 
-      {/* Examples */}
-      <div style={{ flex: 1, background: P.card, border: `1px solid ${P.line}`, borderRadius: 18, padding: 28, marginBottom: 20 }}>
-        <div style={{ fontFamily: P.mono, fontSize: 11, letterSpacing: 1.6, textTransform: 'uppercase', color: P.accent, marginBottom: 14, fontWeight: 600 }}>
-          In conversation
-        </div>
-        {T.examples.slice(0, 2).map((ex, i) => (
-          <div
-            key={i}
-            style={{
-              marginBottom: i === 0 ? 16 : 0,
-              paddingBottom: i === 0 ? 16 : 0,
-              borderBottom: i === 0 ? `1px dashed ${P.line}` : 'none',
-            }}
-          >
-            <div style={{ fontFamily: P.serif, fontSize: 22, fontStyle: 'italic', lineHeight: 1.3, color: P.ink }}>
-              {ex.it}
-            </div>
-            <div style={{ fontFamily: P.sans, fontSize: 14, color: P.mute, marginTop: 4 }}>{ex.en}</div>
-            {ex.reply && (
-              <>
-                <div style={{ fontFamily: P.serif, fontSize: 22, fontStyle: 'italic', fontWeight: 500, color: P.accent, marginTop: 8 }}>
-                  {ex.reply.it}
-                </div>
-                <div style={{ fontFamily: P.sans, fontSize: 14, color: P.mute, marginTop: 4 }}>{ex.reply.en}</div>
-              </>
-            )}
-          </div>
-        ))}
-      </div>
+        <section className="sc-block">
+          <div className="sc-caps sc-label">Letteralmente</div>
+          <p className="sc-literal" style={{ fontSize: px(literalSize) }}>“{idiom.literal}”</p>
+        </section>
 
-      {/* Footer */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-          {['B1 \u00b7 Intermediate', 'Sarcastic', 'All regions'].map((t, i) => (
-            <span
-              key={i}
-              style={{
-                fontFamily: P.mono, fontSize: 11, letterSpacing: 1, textTransform: 'uppercase',
-                padding: '6px 12px', borderRadius: 999, border: `1px solid ${P.line}`, color: P.mute,
-              }}
-            >
-              {t}
-            </span>
-          ))}
+        <section className="sc-block">
+          <div className="sc-caps sc-label">Significa</div>
+          <p className="sc-meaning" style={{ fontSize: px(meaningSize) }}>{idiom.meaning}</p>
+        </section>
+
+        <section className="sc-example">
+          <Fleuron className="sc-fleuron" />
+          <div>
+            <p className="sc-ex-it" style={{ fontSize: px(exSize) }}>{ex.it}</p>
+            <p className="sc-ex-en" style={{ fontSize: px(Math.round(exSize * 0.8)) }}>{ex.en}</p>
+          </div>
+        </section>
         </div>
-        <div style={{ fontFamily: P.mono, fontSize: 11, color: P.mute, letterSpacing: 1.2, textTransform: 'uppercase' }}>
-          modididire.app \u00b7 No. {String(T.dayNumber).padStart(3, '0')}
+      </main>
+
+      <footer className="sc-foot">
+        <Mirror className="sc-mirror">{idiom.idiom.replace(/[!?.]$/, '')}</Mirror>
+        <div className="sc-caps sc-site">
+          italian-idiom.vercel.app <span className="sc-dot">·</span> N. {idiom.number} di {IDIOMS.length}
         </div>
-      </div>
+      </footer>
     </div>
   );
 }
